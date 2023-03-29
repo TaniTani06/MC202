@@ -8,7 +8,7 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "C:\\Users\\gusta\\Desktop\\º\\03_Material de Aula\\MC202\\lab03.exe",
+            "program": "C:\\Users\\gusta\\Desktop\\I\\03_MaterialDeAula\\MC202\\lab03.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
