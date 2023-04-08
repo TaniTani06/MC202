@@ -1,39 +1,31 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 
-int main(){ //nomes com espaço
+int main(void){
+    char frase[120];
+    int continua = scanf("%[^\n] ", frase);
+    char pessoas[1001][51];
+    int i = 0;
 
-    char* pessoas[1000] = {0}, celebridades[1000] = {0};
-    char p_1[50], z[9], p_2[50];
-    int a = 0;
+    while (continua == 1){
+        char* pos = strstr(frase, " conhece ");
+        int loc = pos - frase;                          //local do " conhece " na linha
+        /*printf("%ld\n", loc);*/
+        
+        strncpy(pessoas[i], frase, loc);
+        pessoas[i][loc] = '\0';
+        i++;
 
-    while (scanf("%s %s %s", &p_1, &z, &p_2)){ //recebe a linha
-        pessoas[0] = p_1;
-        pessoas[1] = p_2;
-        for(int i=0; i < 1000; i++){ //compara se p_1 pertence a pessoas
-            if (pessoas[i] == 0){
-                pessoas[i] = p_1;
-                break;
-            }
-            else{
-                if (pessoas[i] == p_1){
-                    break;
-                }
-            }
-        }
-        for(int j=0; j < 1000; j++){ //compara se p_2 pertence a pessoas
-            if (pessoas[j] == 0){
-                pessoas[j] = p_2;
-                break;
-            }
-            else{
-                if (pessoas[j] == p_2){
-                    break;
-                }
-            }
-        }
+        strcpy(pessoas[i], frase+loc+9);
+
+        printf("%s %s\n", pessoas[i-1], pessoas[i]);
+
+        i++;
+        continua = scanf("%[^\n] ", frase);
     }
-    while(pessoas[a]){
-        printf("%s", pessoas[a]);
-        a++;
+    for (int j=0; j<7; j++){
+        printf("%s\n", pessoas[j]);
     }
+    return 0;
 }
