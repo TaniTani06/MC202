@@ -9,7 +9,16 @@ int main(void){
     char pessoas[1001][51];
     char pessoa_1[51], pessoa_2[51];
     int conhecimento[1001][1001];
-    int i = 0, p, q, k, l, m;
+    int i = 0;
+    int p;
+    int q;
+    int k;
+    int l;
+    int m;
+
+    for (i=0; i<1001; i++){
+        pessoas[i][0] = '\0';
+    }
 
     while (continua == 1){
         char* pos = strstr(frase, " conhece ");
@@ -27,7 +36,7 @@ int main(void){
                 break;
             }
             else{
-                if (pessoas[p][1] == 0){
+                if (pessoas[p][0] == '\0'){
                     strcpy(pessoas[p], pessoa_1);
                     break;
                 }
