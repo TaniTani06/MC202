@@ -4,10 +4,10 @@
 #include <string.h>
 
 int main(void){
-    char frase[120];
-    char pessoas[1001][51];
-    char pessoa_1[51], pessoa_2[51];
-    int matriz_conhecimento[1001][1001];
+    char frase[120] = {0};
+    char pessoas[1001][51] = {0};
+    char pessoa_1[51] = {0}, pessoa_2[51] = {0};
+    int matriz_conhecimento[1001][1001] = {0};
     int celebridade[1001] = {0};
     int conhece[1001] = {0};
     int i = 0;
@@ -45,7 +45,7 @@ int main(void){
                 break;
             }
             else{
-                if (pessoas[q][1] == '\0'){
+                if (pessoas[q][0] == '\0'){
                     strcpy(pessoas[q], pessoa_2);
                     tamanho = q+1;
                     break;
