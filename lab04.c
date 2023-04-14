@@ -5,12 +5,15 @@
 
 int main(void){
     char frase[120];
-    int continua = scanf("%[^\n] ", frase);
     char pessoas[1001][51];
     char pessoa_1[51], pessoa_2[51];
-    int conhecimento[1001][1001];
+    int matriz_conhecimento[1001][1001];
+    int celebridade[1001] = {0};
+    int conhece[1001] = {0};
     int i = 0;
-    int p, q, k, l, m, tamanho, linha, coluna;
+    int p, q, tamanho;
+    int continua = scanf("%[^\n] ", frase);
+    
 
     for (i=0; i<1001; i++){
         pessoas[i][0] = '\0';
@@ -50,39 +53,34 @@ int main(void){
             }
         }
         
-        conhecimento[p][q] = 1;                    //registra que pessoas[p] conhece pessoas[q]
+        matriz_conhecimento[p][q] = 1;                    //registra que pessoas[p] conhece pessoas[q]
         
         i++;
         continua = scanf("%[^\n] ", frase);
     }
+
     
-    for (k=0; k<tamanho; k++){
-        for (l=0; l<tamanho; l++){
-            coluna = l;
-            if (conhecimento[k][l] == 1){           //verifica se há "1" na linha
-                break;
-            }
+    for (int j = 0; j < tamanho; j++){                  // calcula quantas pessoas conhecem a pessoa j
+        for (i = 0; i < tamanho; i++){
+            celebridade[j] += matriz_conhecimento[i][j];
         }
-        
-        if (conhecimento[k][coluna] == 0){          //ao sair do loop interno, caso ele seja concluído, verficamos a coluna
-            for (m=0; m<k; m++){
-                linha = m;
-                if (conhecimento[m][k] == 0){
-                    break;
-                }
-            }
-            for (m=k+1; m<tamanho; m++){
-                linha = m;
-                if (conhecimento[m][k] == 0){
-                    break;
-                }
-            }
-            if (conhecimento[linha][k] == 1){
-                printf("%s e' celebridade.\n", pessoas[k]);
+    }
+    
+    for (i = 0; i < tamanho; i++){                      // calcula quantas pessoas a pessoa i conhece, deve ser 0 para ser celeb
+        for (int j = 0; j < tamanho; j++){
+            conhece[i] += matriz_conhecimento[i][j];
+        }
+    }
+    
+    for (i = 0; i < tamanho; i++){
+        if (celebridade[i] == tamanho-1){               // se a pessoa conhece todas, exceto ela (tamanho-1)
+            if (conhece[i] == 0){                       // se a pessoa n conhece ninguém
+                printf("%s e' celebridade.\n", pessoas[i]);
                 return 0;
             }
         }
     }
+
 
     printf("Nao ha' celebridade.\n");
     return 0;
