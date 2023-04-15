@@ -73,8 +73,8 @@ int main(void){
     }
     
     for (i = 0; i < tamanho; i++){
-        if (celebridade[i] == tamanho-1){               // se a pessoa conhece todas, exceto ela (tamanho-1)
-            if (conhece[i] == 0){                       // se a pessoa n conhece ninguém
+        if (celebridade[i] == tamanho-1){               // se a pessoa i conhece todas, exceto ela (tamanho-1)
+            if (conhece[i] == 0){                       // se a pessoa i conhece ninguém
                 printf("%s e' celebridade.\n", pessoas[i]);
                 return 0;
             }
