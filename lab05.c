@@ -16,25 +16,73 @@ elemento *v_alloc(int n){
 
 int a(elemento* vetor, int tamanho, int m, int n, int x){
     for (int i = 0; i < tamanho; i++){
+        if (m == 0 && n == 0){                                                  //Adiciona [0,0] na primeira posição se ele não estiver
+            if (vetor[i].linha !=0 || vetor[i].coluna != 0){
+                for (int mover = tamanho - 1; mover > i; mover--){
+                        vetor[mover] = vetor[mover-1];
+                    }
+                    vetor[i].linha = m;
+                    vetor[i].coluna = n;
+                    vetor[i].valor = x;
+                    return 0;
+            }
+        }
+
+
         if (vetor[i].linha == m){
             if (vetor[i].coluna == n){
                 vetor[i].valor = x;                //atualiza o valor do elemento [i,j], se existir
+                if (x==0){
+                    for (int j = i; j < tamanho; j++){
+                        vetor[j] = vetor[j+1];
+                    }
+
+                    vetor[tamanho - 1].linha = 0;
+                    vetor[tamanho - 1].coluna = 0;
+                    vetor[tamanho - 1].valor = 0;
+                }
                 return 0;
             }
         }
-    }
+        if (vetor[tamanho - 1].valor == 0){                  //se o elemento [i,j] não existir, e houver elemento vazio no fim do vetor
+            for (int pos = 0; pos < tamanho; pos++){
+                if (vetor[pos].linha > m){
+                    for (int mover = tamanho - 1; mover > pos; mover--){
+                        vetor[mover] = vetor[mover-1];
+                    }
+                    vetor[pos].linha = m;
+                    vetor[pos].coluna = n;
+                    vetor[pos].valor = x;
+                    return 0;
+                }
+                if (vetor[pos].linha == m){
+                    while (vetor[pos].linha == m){
+                        if (vetor[pos].coluna > n){
+                            for (int mover = tamanho - 1; mover > pos; mover--){
+                                vetor[mover] = vetor[mover-1];
+                            }
+                            vetor[pos].linha = m;
+                            vetor[pos].coluna = n;
+                            vetor[pos].valor = x;
+                            return 0;
+                        }
 
-    for (int i = 0; i < tamanho; i++){
-        if (vetor[i].valor == 0){                  //se o elemento [i,j] não existir,
-            vetor[i].linha = m;                    //e houver elemento vazio, é adicionado o elemento e suas coordenadas
-            vetor[i].coluna = n;
-            vetor[i].valor = x;
-            return 0;
+                        pos++;
+                    }
+
+                        for (int mover = tamanho - 1; mover > pos; mover--){
+                            vetor[mover] = vetor[mover-1];
+                            }
+                        vetor[pos].linha = m;
+                        vetor[pos].coluna = n;
+                        vetor[pos].valor = x;
+                        return 0;
+                }
+            }
         }
     }
-
-    printf("O VC esta' cheio.");                     //e se não houver elemento vazio o vetor está cheio
-    return 0;
+    printf("O VC esta' cheio.\n");                     //e se não houver elemento vazio no fim o vetor está cheio
+        return 0;
 }
 
 int r(elemento* vetor, int tamanho, int m, int n){ 
@@ -51,9 +99,9 @@ int r(elemento* vetor, int tamanho, int m, int n){
     return 0;
 }
 
-int p(elemento* vetor, int tamanho){                //função p, imprime o conteúdo do VC, retorna 1(falha) ou 0 (sucesso);
-    printf("VC: ");
+int p(elemento* vetor, int tamanho){                                //função p, ordena e imprime o conteúdo do VC 
     
+    printf("VC: ");
     for (int i = 0; i < tamanho; i++){
         if (vetor[i].valor != 0){
             printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
@@ -82,9 +130,9 @@ int main(){
 
     char func[15];
 
-    scanf("%[^\n]", func);
+    scanf("%[^\n] ", func);
     while (func[0] != 't'){
-        if(func[0] == a){                                //func da forma a [i,j] x
+        if(func[0] == 'a'){                                //func da forma a [i,j] x
             sscanf(func, "a [%d,%d] %d", &v_i, &v_j, &x);   //retira de func os argumentos para "a"
             a(VC, m+n, v_i, v_j, x);
         }
@@ -98,11 +146,11 @@ int main(){
             p(VC, m+n);
         }
         
-        scanf("%[^\n]", &func);
+        scanf("%[^\n] ", &func);
     }
 
 return 0;
 
 }
-//encontrar uma forma de definir qual função é chamada (possivelmente comparando o elemento 0 da string com a e r)
-//depois, usar sscanf para retirar a coordenada i, j do elemento (e o valor x a ser subtituido no caso da função a)
+//eliminar elementos
+// VC cheio de mais XD
