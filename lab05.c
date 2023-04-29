@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 typedef struct{
     int linha;
@@ -32,7 +33,7 @@ int a(elemento* vetor, int tamanho, int m, int n, int x){
         }
     }
 
-    printf("O VC esta' cheio.")
+    printf("O VC esta' cheio.");                     //e se não houver elemento vazio o vetor está cheio
     return 0;
 }
 
@@ -54,7 +55,9 @@ int p(elemento* vetor, int tamanho){                //função p, imprime o cont
     printf("VC: ");
     
     for (int i = 0; i < tamanho; i++){
-    printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+        if (vetor[i].valor != 0){
+            printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+        }
     }
     
     printf("\n");
@@ -64,25 +67,42 @@ int p(elemento* vetor, int tamanho){                //função p, imprime o cont
 
 int main(){
 
-int m, n, k;
-char str[15];
+    int m, n, k, x;
+    int v_i, v_j;
 
-scanf("%d %d\n", &m, &n);
-scanf ("%d\n", &k);
+    scanf("%d %d\n", &m, &n);
+    scanf ("%d\n", &k);
 
-elemento *VC = v_alloc(m+n);
+    elemento *VC = v_alloc(m+n);
 
-for (int i = 0; i < k; i++){
-    scanf("[%d,%d] %d\n", &VC[i].linha, &VC[i].coluna, &VC[i].valor);
+    for (int i = 0; i < k; i++){                                           //adiciona os elementos ao VC
+        scanf("[%d,%d] %d\n", &VC[i].linha, &VC[i].coluna, &VC[i].valor);
+    }
+
+
+    char func[15];
+
+    scanf("%[^\n]", func);
+    while (func[0] != 't'){
+        if(func[0] == a){                                //func da forma a [i,j] x
+            sscanf(func, "a [%d,%d] %d", &v_i, &v_j, &x);   //retira de func os argumentos para "a"
+            a(VC, m+n, v_i, v_j, x);
+        }
+
+        if(func[0] == 'r'){                                //fun da forma r [i,j]
+            sscanf(func, "r [%d,%d]", &v_i, &v_j);
+            r(VC, m+n, v_i, v_j);
+        }
+
+        if(func[0] == 'p'){
+            p(VC, m+n);
+        }
+        
+        scanf("%[^\n]", &func);
+    }
+
+return 0;
+
 }
-
-p(VC, k);
-
-r(VC, k, 2, 2);
-
-r(VC, k, 5, 5);
-
-}
-
 //encontrar uma forma de definir qual função é chamada (possivelmente comparando o elemento 0 da string com a e r)
 //depois, usar sscanf para retirar a coordenada i, j do elemento (e o valor x a ser subtituido no caso da função a)
