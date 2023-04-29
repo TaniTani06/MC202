@@ -13,7 +13,44 @@ elemento *v_alloc(int n){
 
 }
 
-int p(elemento* vetor, int tamanho){              //função p, imprime o conteúdo do VC, retorna 1(falha) ou 0 (sucesso);
+int a(elemento* vetor, int tamanho, int m, int n, int x){
+    for (int i = 0; i < tamanho; i++){
+        if (vetor[i].linha == m){
+            if (vetor[i].coluna == n){
+                vetor[i].valor = x;                //atualiza o valor do elemento [i,j], se existir
+                return 0;
+            }
+        }
+    }
+
+    for (int i = 0; i < tamanho; i++){
+        if (vetor[i].valor == 0){                  //se o elemento [i,j] não existir,
+            vetor[i].linha = m;                    //e houver elemento vazio, é adicionado o elemento e suas coordenadas
+            vetor[i].coluna = n;
+            vetor[i].valor = x;
+            return 0;
+        }
+    }
+
+    printf("O VC esta' cheio.")
+    return 0;
+}
+
+int r(elemento* vetor, int tamanho, int m, int n){ 
+    for (int i = 0; i < tamanho; i++){
+        if (vetor[i].linha == m){
+            if (vetor[i].coluna == n){                              //procura o elemento no vetor pelos suas coordenadas
+                printf("M[%d][%d] == %d\n", m, n, vetor[i].valor);  //imprime seu valor caso encontre
+                return 0;
+            }
+        }
+    }
+
+    printf("M[%d][%d] == 0\n", m, n);                               //imprime 0 caso não encontre
+    return 0;
+}
+
+int p(elemento* vetor, int tamanho){                //função p, imprime o conteúdo do VC, retorna 1(falha) ou 0 (sucesso);
     printf("VC: ");
     
     for (int i = 0; i < tamanho; i++){
@@ -23,6 +60,7 @@ int p(elemento* vetor, int tamanho){              //função p, imprime o conte�
     printf("\n");
     return 0;
 }
+
 
 int main(){
 
@@ -40,4 +78,11 @@ for (int i = 0; i < k; i++){
 
 p(VC, k);
 
+r(VC, k, 2, 2);
+
+r(VC, k, 5, 5);
+
 }
+
+//encontrar uma forma de definir qual função é chamada (possivelmente comparando o elemento 0 da string com a e r)
+//depois, usar sscanf para retirar a coordenada i, j do elemento (e o valor x a ser subtituido no caso da função a)
