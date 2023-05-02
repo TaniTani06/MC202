@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
+
 typedef struct{
     int linha;
     int coluna;
@@ -14,9 +15,34 @@ elemento *v_alloc(int n){
 
 }
 
+//////////////////////////////////////////////Função_a/////////////////////////////////////////////////////
 int a(elemento* vetor, int tamanho, int m, int n, int x){
+    if (x == 0){
+        for (int i = 0; i < tamanho; i++){
+            if (vetor[i].linha == m){
+                if (vetor[i].coluna == n){
+                    for (int j = i; j < tamanho-1; j++){        //move todos os elementos uma vez "para trás", apagando o elemnto deletado
+                        vetor[j] = vetor[j+1];
+                    }
+                    vetor[tamanho - 1].linha = 0;               //zera o último elemento,
+                    vetor[tamanho - 1].coluna = 0;              //liberando espaço caso ele já não fosse 0
+                    vetor[tamanho - 1].valor = 0;
+                    return 0;
+                }
+            }
+        }
+        return 0;                                             //se não está no vetor, ignora a entrada
+    }
+
     for (int i = 0; i < tamanho; i++){
-        if (m == 0 && n == 0){                                                  //Adiciona [0,0] na primeira posição se ele não estiver
+        if (vetor[i].linha == m){
+            if (vetor[i].coluna == n){
+                vetor[i].valor = x;                //atualiza o valor do elemento [i,j], se existir
+                return 0;
+            }
+        }
+
+        if (m == 0 && n == 0){                                       //Adiciona [0,0] x na primeira posição se ele não estiver
             if (vetor[i].linha !=0 || vetor[i].coluna != 0){
                 for (int mover = tamanho - 1; mover > i; mover--){
                         vetor[mover] = vetor[mover-1];
@@ -27,57 +53,50 @@ int a(elemento* vetor, int tamanho, int m, int n, int x){
                     return 0;
             }
         }
+        
+    }
 
+    int pos;
 
-        if (vetor[i].linha == m){
-            if (vetor[i].coluna == n){
-                vetor[i].valor = x;                //atualiza o valor do elemento [i,j], se existir
-                if (x==0){
-                    for (int j = i; j < tamanho; j++){
-                        vetor[j] = vetor[j+1];
-                    }
-
-                    vetor[tamanho - 1].linha = 0;
-                    vetor[tamanho - 1].coluna = 0;
-                    vetor[tamanho - 1].valor = 0;
+    if (vetor[tamanho - 1].valor == 0){                  //se o elemento [i,j] não existir, e houver elemento vazio no fim do vetor
+        for (int i = 0; i < tamanho; i++){
+            if (vetor[i].linha > m){
+                for (int mover = tamanho - 1; mover > i; mover--){
+                    vetor[mover] = vetor[mover-1];
                 }
-                return 0;
             }
-        }
-        if (vetor[tamanho - 1].valor == 0){                  //se o elemento [i,j] não existir, e houver elemento vazio no fim do vetor
-            for (int pos = 0; pos < tamanho; pos++){
-                if (vetor[pos].linha > m){
-                    for (int mover = tamanho - 1; mover > pos; mover--){
-                        vetor[mover] = vetor[mover-1];
-                    }
-                    vetor[pos].linha = m;
-                    vetor[pos].coluna = n;
-                    vetor[pos].valor = x;
-                    return 0;
-                }
-                if (vetor[pos].linha == m){
-                    while (vetor[pos].linha == m){
-                        if (vetor[pos].coluna > n){
-                            for (int mover = tamanho - 1; mover > pos; mover--){
-                                vetor[mover] = vetor[mover-1];
-                            }
-                            vetor[pos].linha = m;
-                            vetor[pos].coluna = n;
-                            vetor[pos].valor = x;
-                            return 0;
-                        }
-
-                        pos++;
-                    }
-
+            if (vetor[pos].linha == m){
+                while (vetor[pos].linha == m){
+                    if (vetor[pos].coluna > n){
                         for (int mover = tamanho - 1; mover > pos; mover--){
                             vetor[mover] = vetor[mover-1];
-                            }
+                        }
                         vetor[pos].linha = m;
                         vetor[pos].coluna = n;
                         vetor[pos].valor = x;
                         return 0;
+                    }
+                    pos++;
                 }
+                for (int mover = tamanho - 1; mover > pos; mover--){
+                    vetor[mover] = vetor[mover-1];
+                }
+                vetor[pos].linha = m;
+                vetor[pos].coluna = n;
+                vetor[pos].valor = x;
+                return 0;
+            }
+        }
+        vetor[pos].linha = m;
+        vetor[pos].coluna = n;
+        vetor[pos].valor = x;
+        return 0;
+        for (int i = 0; i < tamanho; i++){
+            if (vetor[i].valor == 0){
+                vetor[i].linha = m;
+                vetor[i].coluna = n;
+                vetor[i].valor = x;
+                return 0;
             }
         }
     }
@@ -85,6 +104,7 @@ int a(elemento* vetor, int tamanho, int m, int n, int x){
         return 0;
 }
 
+//////////////////////////////////////////////Função_r/////////////////////////////////////////////////////
 int r(elemento* vetor, int tamanho, int m, int n){ 
     for (int i = 0; i < tamanho; i++){
         if (vetor[i].linha == m){
@@ -99,20 +119,24 @@ int r(elemento* vetor, int tamanho, int m, int n){
     return 0;
 }
 
+//////////////////////////////////////////////Função_p//////////////////////////////////////////////////////
 int p(elemento* vetor, int tamanho){                                //função p, ordena e imprime o conteúdo do VC 
-    
+    if (vetor[0].valor == 0){
+        printf("O VC esta' vazio.\n");
+        return 0;
+    }
+
     printf("VC: ");
     for (int i = 0; i < tamanho; i++){
         if (vetor[i].valor != 0){
             printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
         }
     }
-    
     printf("\n");
     return 0;
 }
 
-
+////////////////////////////////////////////////Main////////////////////////////////////////////////////////
 int main(){
 
     int m, n, k, x;
@@ -128,7 +152,7 @@ int main(){
     }
 
 
-    char func[15];
+    char func[20];
 
     scanf("%[^\n] ", func);
     while (func[0] != 't'){
@@ -146,11 +170,7 @@ int main(){
             p(VC, m+n);
         }
         
-        scanf("%[^\n] ", &func);
+        scanf("%[^\n] ", func);
     }
-
 return 0;
-
 }
-//eliminar elementos
-// VC cheio de mais XD
