@@ -65,7 +65,7 @@ int df_resize(dequef* D, long new_cap) {
       return 0;
    }
    else{
-      for (int i = 0; i < D->cap; i++){
+      for (int i = 0; i < D->size; i++){
 
          pos = i + D->first;
          if (pos = D->cap){
@@ -76,6 +76,7 @@ int df_resize(dequef* D, long new_cap) {
 
       free (D->data);
       D->data = new_data;
+      D->cap = new_cap;
       
       return 1;
    }
@@ -125,7 +126,7 @@ int df_push(dequef* D, float x) {
 **/
 float df_pop(dequef* D) {
    float f;
-   int* new_data;
+   int sucesso;
 
    if (D->size == 0){
       return 0.0;
@@ -134,12 +135,11 @@ float df_pop(dequef* D) {
    f = D->data[D->size-1];
    D->size--;
 
-   if ((float)D->size == (D->cap)/((D->factor)*(D->factor)) && D->cap != D->mincap){
-      new_data = calloc((D->cap/D->factor), sizeof(float));
-      if (new_data == NULL){
-         
-      }
+   if ((float)D->size == (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
+      df_resize(D, ((D->cap)/(D->factor)));
    }
+
+   return f;
 }
 
 
