@@ -18,7 +18,7 @@
 dequef* df_alloc(long capacity, double factor) {
    dequef* D;
 
-   D->data = calloc(capacity, sizeof(float));
+   D->data = calloc(capacity, sizeof(float));  //provavelmente tem um erro aqui ;-;
 
    D->first = 0;
    D->size = 0;
@@ -56,6 +56,29 @@ long df_size(dequef* D) {
 
 
 int df_resize(dequef* D, long new_cap) {
+   int* new_data;
+   int pos;
+
+   new_data = (int*)calloc(new_cap, sizeof(float));
+
+   if (new_data == NULL){
+      return 0;
+   }
+   else{
+      for (int i = 0; i < D->cap; i++){
+
+         pos = i + D->first;
+         if (pos = D->cap){
+            pos -= D->cap;
+         }
+         new_data[i] = D->data[pos];
+      }
+
+      free (D->data);
+      D->data = new_data;
+      
+      return 1;
+   }
 }
 
 
@@ -70,6 +93,21 @@ int df_resize(dequef* D, long new_cap) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_push(dequef* D, float x) {
+   int successo;
+
+   if (D->size == D->cap){
+      successo = df_resize(D, ((D->factor)*(D->cap)));
+   }
+
+   if (successo == 0){
+      return 0;
+   }
+   else{
+   D->data[D->size] = x;
+   D->size++;
+   
+   return 1;
+   }
 }
 
 
@@ -86,6 +124,22 @@ int df_push(dequef* D, float x) {
    If D was empty prior to invocation, it returns 0.0 and D remains unchanged.
 **/
 float df_pop(dequef* D) {
+   float f;
+   int* new_data;
+
+   if (D->size == 0){
+      return 0.0;
+   }
+
+   f = D->data[D->size-1];
+   D->size--;
+
+   if ((float)D->size == (D->cap)/((D->factor)*(D->factor)) && D->cap != D->mincap){
+      new_data = calloc((D->cap/D->factor), sizeof(float));
+      if (new_data == NULL){
+         
+      }
+   }
 }
 
 
