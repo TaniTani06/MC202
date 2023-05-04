@@ -17,8 +17,12 @@
 **/
 dequef* df_alloc(long capacity, double factor) {
    dequef* D;
+   D = malloc(sizeof(dequef));
+   if (D == NULL){
+      return D;
+   }
 
-   D->data = calloc(capacity, sizeof(float));  //provavelmente tem um erro aqui ;-;
+   D->data = (float*)calloc(capacity, sizeof(float));
 
    D->first = 0;
    D->size = 0;
@@ -26,10 +30,6 @@ dequef* df_alloc(long capacity, double factor) {
    D->cap = capacity;
    D->mincap = capacity;
    D->factor = factor;
-
-   if (D->data == NULL){
-      return 0;
-   }
 
    return D;
 }
@@ -41,7 +41,7 @@ dequef* df_alloc(long capacity, double factor) {
 **/
 void df_free(dequef* D) {
    free(D->data);
-   D = NULL;
+   free (D);
 }
 
 
@@ -56,10 +56,10 @@ long df_size(dequef* D) {
 
 
 int df_resize(dequef* D, long new_cap) {
-   int* new_data;
+   float* new_data;
    int pos;
 
-   new_data = (int*)calloc(new_cap, sizeof(float));
+   new_data = (float*)calloc(new_cap, sizeof(float));
 
    if (new_data == NULL){
       return 0;
@@ -68,7 +68,7 @@ int df_resize(dequef* D, long new_cap) {
       for (int i = 0; i < D->size; i++){
 
          pos = i + D->first;
-         if (pos = D->cap){
+         if (pos >= D->cap){
             pos -= D->cap;
          }
          new_data[i] = D->data[pos];
@@ -94,21 +94,25 @@ int df_resize(dequef* D, long new_cap) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_push(dequef* D, float x) {
-   int successo;
+   int successo = 1;
+   int pos;
 
    if (D->size == D->cap){
       successo = df_resize(D, ((D->factor)*(D->cap)));
+      if (successo == 0){
+         return 0;
+      }
+   }
+   
+   pos = D->first + D->size;
+   if (pos >= D->cap){
+      pos -= D->cap;
    }
 
-   if (successo == 0){
-      return 0;
-   }
-   else{
-   D->data[D->size] = x;
+   D->data[pos] = x;
    D->size++;
    
    return 1;
-   }
 }
 
 
@@ -126,7 +130,6 @@ int df_push(dequef* D, float x) {
 **/
 float df_pop(dequef* D) {
    float f;
-   int sucesso;
 
    if (D->size == 0){
       return 0.0;
@@ -135,7 +138,7 @@ float df_pop(dequef* D) {
    f = D->data[D->size-1];
    D->size--;
 
-   if ((float)D->size == (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
+   if ((float)D->size <= (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
       df_resize(D, ((D->cap)/(D->factor)));
    }
 
@@ -154,6 +157,26 @@ float df_pop(dequef* D) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_inject(dequef* D, float x) {
+   int successo = 1;
+   int pos;
+
+   if (D->size == D->cap){
+      successo = df_resize(D, ((D->factor)*(D->cap)));
+      if (successo == 0){
+         return 0;
+      }
+   }
+
+   pos = D->first - 1;
+   if (pos <= 0){
+      pos += D->cap;
+   }
+
+   D->data[pos] = x;
+   D->first = pos;
+   D->size++;
+
+   return 1;
 }
 
 
@@ -168,11 +191,28 @@ int df_inject(dequef* D, float x) {
    If it is not possible to resize, then the array size remains unchanged.
 
    This function returns the float removed from D.
-
-   This function returns the float removed from D.
    If D was empty prior to invocation, it returns 0.0 and D remains unchanged.
 **/
 float df_eject(dequef* D) {
+   float f;
+
+   if (D->size == 0){
+      return 0.0;
+   }
+
+   f = D->data[D->first];
+   D->first++;
+   if (D->first >= D->cap){
+      D->first -= D->cap;
+   }
+
+   D->size--;
+
+   if ((float)D->size <= (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
+      df_resize(D, ((D->cap)/(D->factor)));
+   }
+
+   return f;
 }
 
 
@@ -183,6 +223,14 @@ float df_eject(dequef* D) {
    If i is not in [0,|D|-1]] then D remains unchanged.
 **/
 void df_set(dequef* D, long i, float x) {
+   int pos;
+
+   pos = i + D->first;
+   if (pos >= D->cap){
+      pos -= D->cap;
+   }
+
+   D->data[pos] = x;
 }
 
 
@@ -193,6 +241,14 @@ void df_set(dequef* D, long i, float x) {
    If i is not in [0,|D|-1]] it returns 0.0.
 **/
 float df_get(dequef* D, long i) {
+   int pos;
+
+   pos = i + D->first;
+   if (pos >= D->cap){
+      pos -= D->cap;
+   }
+
+   return D->data[pos];
 }
 
 
@@ -203,20 +259,15 @@ float df_get(dequef* D, long i) {
 void df_print(dequef* D) {
    int pos;
 
-   printf("deque (%d):", df_size(D));
+   printf("deque (%ld):", df_size(D));
    for (int i = 0; i < df_size(D); i++){
       pos = i + D->first;                      //não necessariamente o primeiro elemento do deque é o array[0];
       
-      if (pos = D->cap){                       //faz a "volta", pois é um vetor circular
+      if (pos >= D->cap){                       //faz a "volta", pois é um vetor circular
          pos -=  D->cap;                       //se o primeiro elemento for 6 em uma array de tamanho 8: (6,7,0,1,...)
       }
 
       printf(" %.1f", D->data[pos]);
    }
    printf(" \n");                              //talvez dê problema o ' \n' (em vez de '\n')
-   return 0;
 }
-
-
-
-//n consegui printar o deque

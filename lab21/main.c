@@ -5,13 +5,12 @@
 
 #include "dequef.h"
 
-//Apenas para organização, o sqtpm já tem o arquivo main pronto pra esse trabalho
 
 int main(void) {
 
   char cmd[13];
   float f;
-  int i, st;
+  int i, st = 1;
   dequef* D = NULL;
 
   while (1) {
@@ -24,7 +23,7 @@ int main(void) {
         df_free(D);
 
       D = df_alloc(i,f);
-      if (!D) {                                    //Se o deque D for igual a 0
+      if (!D) {
         printf("Unable to create a dequef.\n");
         return errno ? errno : 1;
       }
