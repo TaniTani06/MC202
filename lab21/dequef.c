@@ -22,7 +22,7 @@ dequef* df_alloc(long capacity, double factor) {
       return D;
    }
 
-   D->data = (float*)calloc(capacity, sizeof(float));
+   D->data = (float*)malloc(capacity*sizeof(float));
 
    D->first = 0;
    D->size = 0;
@@ -59,7 +59,7 @@ int df_resize(dequef* D, long new_cap) {
    float* new_data;
    int pos;
 
-   new_data = (float*)calloc(new_cap, sizeof(float));
+   new_data = (float*)malloc(new_cap*sizeof(float));
 
    if (new_data == NULL){
       return 0;
@@ -77,6 +77,7 @@ int df_resize(dequef* D, long new_cap) {
       free (D->data);
       D->data = new_data;
       D->cap = new_cap;
+      D->first = 0;
       
       return 1;
    }
@@ -98,7 +99,7 @@ int df_push(dequef* D, float x) {
    int pos;
 
    if (D->size == D->cap){
-      successo = df_resize(D, ((D->factor)*(D->cap)));
+      successo = df_resize(D, (long)((D->factor)*(D->cap)));
       if (successo == 0){
          return 0;
       }
@@ -139,7 +140,7 @@ float df_pop(dequef* D) {
    D->size--;
 
    if ((float)D->size <= (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
-      df_resize(D, ((D->cap)/(D->factor)));
+      df_resize(D, (long)((D->cap)/(D->factor)));
    }
 
    return f;
@@ -160,15 +161,15 @@ int df_inject(dequef* D, float x) {
    int successo = 1;
    int pos;
 
-   if (D->size == D->cap){
-      successo = df_resize(D, ((D->factor)*(D->cap)));
+   if (D->size >= D->cap){
+      successo = df_resize(D, (long)((D->factor)*(D->cap)));
       if (successo == 0){
          return 0;
       }
    }
 
    pos = D->first - 1;
-   if (pos <= 0){
+   if (pos < 0){
       pos += D->cap;
    }
 
@@ -201,6 +202,8 @@ float df_eject(dequef* D) {
    }
 
    f = D->data[D->first];
+   D->data[D->first] = 0;
+
    D->first++;
    if (D->first >= D->cap){
       D->first -= D->cap;
@@ -209,7 +212,7 @@ float df_eject(dequef* D) {
    D->size--;
 
    if ((float)D->size <= (D->cap)/((D->factor)*(D->factor)) && D->cap >= (D->factor)*(D->mincap)){
-      df_resize(D, ((D->cap)/(D->factor)));
+      df_resize(D, (long)((D->cap)/(D->factor)));
    }
 
    return f;
