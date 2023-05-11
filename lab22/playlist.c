@@ -71,7 +71,30 @@ void insere(lista* L, char* mus){
 
 
 
-void tira(lista* L, char* mus);
+void tira(lista* L, char* mus){
+    node* p = malloc(sizeof(node));
+    p = L->incio->next
+    while (strcmp(mus, p->musica) != 0){
+        p = p->next;
+    }
+
+    p->prev->next = p->next;
+    p->next->prev = p->prev;
+
+    if (L->cursor->prev == p){
+        L->cursor->prev == p->prev;
+    }
+    if (L->cursor->next == p){
+        L->cursor->next == p->next
+    }
+
+    free(p);
+
+    if (L->cursor->prev == L->inicio){
+        L->cursor->prev = L->cursor->next;
+        L->cursor->next = L->cursor->next->next;
+    }
+}
 
 
 /*Imprime a música atual (cursor->prev)
@@ -89,14 +112,28 @@ void toca(lista* L){
 
 
 void volta(lista* L);
+    if (L->cursor->prev->prev != L->inicio){
+        L->cursor->next = L->cursor->prev;
+        L->cursor->prev = L->cursor->prev->prev;
+    }
 
 
 
 void p_fim(lista* L);
+    while (L->cursor->next != L->fim){
+        toca(L);
+    }
+    if (L->cursor->next == L->fim){
+        toca (L);
+    }
 
 
 
-void inverte(lista* L);
+void inverte(lista* L){
+    
+}
+
+
 
 void libera(lista* L){
     node* p = L->inicio;

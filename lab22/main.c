@@ -16,28 +16,28 @@ int main(void){
     while(1){
         scanf("%s", op);
 
-        if (strcmp(op, "insere")){
+        if (strcmp(op, "insere") == 0){
             scanf("%[^\n] ", musica);
             insere(playlist, musica);
         }
 
-        else if (strcmp(op, "remove")){
+        else if (strcmp(op, "remove") == 0){
 
         }
 
-        else if (strcmp(op, "toca")){
+        else if (strcmp(op, "toca") == 0){
 
         }
 
-        else if (strcmp(op, "volta")){
+        else if (strcmp(op, "volta") == 0){
 
         }
 
-        else if (strcmp(op, "final")){
+        else if (strcmp(op, "final") == 0){
 
         }
 
-        else if (strcmp(op, "inverte")){
+        else if (strcmp(op, "inverte") == 0){
 
         }
 
