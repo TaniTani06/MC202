@@ -73,7 +73,7 @@ void insere(lista* L, char* mus){
 
 void tira(lista* L, char* mus){
     node* p = malloc(sizeof(node));
-    p = L->incio->next
+    p = L->inicio->next;
     while (strcmp(mus, p->musica) != 0){
         p = p->next;
     }
@@ -82,10 +82,10 @@ void tira(lista* L, char* mus){
     p->next->prev = p->prev;
 
     if (L->cursor->prev == p){
-        L->cursor->prev == p->prev;
+        L->cursor->prev = p->prev;
     }
     if (L->cursor->next == p){
-        L->cursor->next == p->next
+        L->cursor->next = p->next;
     }
 
     free(p);
@@ -111,27 +111,53 @@ void toca(lista* L){
 
 
 
-void volta(lista* L);
+void volta(lista* L){
     if (L->cursor->prev->prev != L->inicio){
         L->cursor->next = L->cursor->prev;
         L->cursor->prev = L->cursor->prev->prev;
     }
+}
 
 
 
-void p_fim(lista* L);
+void p_fim(lista* L){
     while (L->cursor->next != L->fim){
         toca(L);
     }
     if (L->cursor->next == L->fim){
         toca (L);
     }
-
-
-
-void inverte(lista* L){
-    
 }
+
+
+
+/* Troca inicio e fim, depois troca prev e next de cada nó até o fim*/
+void inverte(lista* L){
+    node* p;
+    node* q;
+
+    p = L->inicio;
+    q = L->inicio->next;
+    L->inicio = L->fim;
+    L->inicio->next = L->fim->prev;
+    L->inicio->prev = NULL;
+
+
+    L->fim = p;
+    L->fim->prev = q;
+    L->fim->next = NULL;
+
+    p = L->inicio;
+    while (p->next != L->fim){
+        p = p->next;
+        q = p->prev;
+        p->prev = p->next;
+        p->next = q;
+    }
+
+    L->cursor->next = L->cursor->prev->next;
+}
+
 
 
 
@@ -147,3 +173,6 @@ void libera(lista* L){
     free(L->cursor);
     free(L);
 }
+
+
+//remove com problema :D
