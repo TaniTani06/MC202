@@ -50,10 +50,13 @@ int main(void){
                 return 1;
             }
         }
+        scanf("%d\n", &n);
+        if (n == 0){
+            break;
+        }
         printf("\n");
         libera(playlist);
         playlist = cria();
-        scanf("%d\n", &n);
     }
     libera(playlist);
 }
