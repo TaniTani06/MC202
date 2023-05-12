@@ -24,7 +24,7 @@ typedef struct{
 lista* cria();
 
 void insere(lista* L, char* mus);
-void tira(lista* L, char* mus);
+int tira(lista* L, char* mus);
 
 void toca(lista* L);
 void volta(lista* L);

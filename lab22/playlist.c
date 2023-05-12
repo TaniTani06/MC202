@@ -71,10 +71,16 @@ void insere(lista* L, char* mus){
 
 
 
-void tira(lista* L, char* mus){
+int tira(lista* L, char* mus){
     node* p = malloc(sizeof(node));
     p = L->inicio->next;
+    if (p == L->fim){
+        return 0;
+    }
     while (strcmp(mus, p->musica) != 0){
+        if (p->next == L->fim){
+            return 0;
+        }
         p = p->next;
     }
 
@@ -94,6 +100,7 @@ void tira(lista* L, char* mus){
         L->cursor->prev = L->cursor->next;
         L->cursor->next = L->cursor->next->next;
     }
+    return 1;
 }
 
 
@@ -101,8 +108,13 @@ void tira(lista* L, char* mus){
 Move o cursor para a próxima música, se houver
 */
 void toca(lista* L){
-    printf("%s\n", L->cursor->prev->musica);
-
+    if (L->cursor->prev == L->inicio){
+        printf("\n");
+    }
+    else{
+        printf("%s\n", L->cursor->prev->musica);
+    }
+    
     if(L->cursor->next != L->fim){
         L->cursor->prev = L->cursor->next;
         L->cursor->next = L->cursor->next->next;
@@ -173,6 +185,3 @@ void libera(lista* L){
     free(L->cursor);
     free(L);
 }
-
-
-//remove com problema :D

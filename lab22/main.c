@@ -19,12 +19,12 @@ int main(void){
             scanf("%s", op);
 
             if (strcmp(op, "insere") == 0){
-                scanf("%[^\n] ", musica);
+                scanf(" %[^\n]", musica);
                 insere(playlist, musica);
             }
 
             else if (strcmp(op, "remove") == 0){
-                scanf("%[^\n] ", musica);
+                scanf(" %[^\n] ", musica);
                 tira(playlist, musica);
             }
 
