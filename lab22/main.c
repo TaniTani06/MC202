@@ -50,6 +50,7 @@ int main(void){
                 return 1;
             }
         }
+        printf("\n");
         libera(playlist);
         playlist = cria();
         scanf("%d\n", &n);

@@ -90,7 +90,7 @@ void tira(lista* L, char* mus){
 
     free(p);
 
-    if (L->cursor->prev == L->inicio){
+    if (L->cursor->prev == L->inicio && L->cursor->next != L->fim){
         L->cursor->prev = L->cursor->next;
         L->cursor->next = L->cursor->next->next;
     }
