@@ -16,11 +16,17 @@ struct node{
 typedef struct node node;
 
 typedef struct{
-    node* inicio;
-    node* fim;
+    node* head;
+    node* tail;
 }lista;
+
 
 lista* cria();
 
+void libera(lista* L);
+int adiciona(lista* L, int data);
+lista* extrair(lista* L, int start, int end);
+int inserir(lista* L, lista* new_L, int pos);
+void imprimir(lista* L);
 
 #endif
