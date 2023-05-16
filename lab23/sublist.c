@@ -6,7 +6,7 @@
 #include "sublist.h"
 
 
-//cria uma lista vazia, com sentinelas no início e fim
+
 lista* cria(){
     lista* L = malloc(sizeof(lista));
     if (L == NULL){
@@ -83,7 +83,7 @@ lista* extrair(lista* L, int start, int end){
 
     if (start <= end){
         for (i = start; i <= end; i++){
-            adciona(new_L, n->data);
+            adiciona(new_L, n->data);
             n = n->next;
         }
     }
@@ -140,7 +140,8 @@ void imprimir(lista* L){
 
     while (p != L->tail){
         printf(", %d", p->data);
+        p = p->next;
     }
 
-    printf(" }");
+    printf(" }\n");
 }
