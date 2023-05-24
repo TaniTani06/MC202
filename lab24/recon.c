@@ -9,7 +9,7 @@
 
 node* cria(char raiz){
     node* arv = malloc(sizeof(node));
-    if arv == NULL{
+    if (arv == NULL){
         return NULL;
     }
 
@@ -106,6 +106,29 @@ int pos(node* arv){
 
 
 
+void enq(fila Q, node* arv){
+    Q.F[Q.posf] = arv;
+    Q.posf++;
+    Q.empty = 0;
+}
+
+
+
+node* dequeue(fila Q){
+    node* p = malloc(sizeof(node));
+
+    p = Q.F[Q.posi];
+    Q.F[Q.posi] = 0;
+    Q.posi++;
+    if (Q.posi == Q.posf){
+        Q.empty = 1;
+    }
+
+    return p;
+}
+
+
+
 int larg(node* arv){
     fila Q;
     Q.posi = 0;
@@ -117,7 +140,7 @@ int larg(node* arv){
     enq(Q,arv);
     
     while (Q.empty = 0){
-        p = dequeue(Q)
+        p = dequeue(Q);
         printf("%c", p->data);
 
         if (p->L != NULL){

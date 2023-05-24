@@ -4,3 +4,34 @@
 #include <string.h>
 
 #include "recon.h"
+
+int main(void){
+    char em[100];
+    char pre[100];
+    int st = scanf("%s %s", pre, em);
+    char raiz;
+    node* arvore;
+
+    while (st == 2){
+        arvore = cria(pre[0]);
+
+        for (int i = 1; i < strlen(pre); i++){
+            adiciona(arvore, pre[i], em);
+        }
+
+        pos(arvore);
+
+        larg(arvore);
+
+        libera(arvore);
+
+        st = scanf("%s %s", pre, em);
+    }
+
+
+
+
+
+
+
+}

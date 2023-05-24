@@ -30,4 +30,7 @@ int adiciona(node* arv, char data, char* em);
 int pos(node* arv);
 int larg(node* arv);
 
+void enq(fila Q, node* arv);
+node* dequeue (fila Q);
+
 #endif
