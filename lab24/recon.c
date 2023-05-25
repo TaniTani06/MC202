@@ -56,10 +56,14 @@ int adiciona(node* arv, char data, char* em){
     node* p = arv;
     node* n = malloc(sizeof(node));
 
+    if(n == NULL){
+        return 1;
+    }
+
+    n->data = data;
     n->L = NULL;
     n->R = NULL;
-    n->data = data;
-
+    
     char* pos;
 
     pos = strchr(em, p->data);
