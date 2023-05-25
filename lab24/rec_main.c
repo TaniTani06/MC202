@@ -9,7 +9,6 @@ int main(void){
     char em[100];
     char pre[100];
     int st = scanf("%s %s", pre, em);
-    char raiz;
     node* arvore;
 
     while (st == 2){
@@ -21,17 +20,18 @@ int main(void){
 
         pos(arvore);
 
+        printf(" ");
         larg(arvore);
+        printf("\n");
 
         libera(arvore);
 
         st = scanf("%s %s", pre, em);
+        
+        if (st == -2){
+            break;
+        }
     }
-
-
-
-
-
 
 
 }

@@ -138,7 +138,7 @@ int larg(node* arv){
     node* p = malloc(sizeof(node));
 
     enq(Q,arv);
-    
+
     while (Q.empty = 0){
         p = dequeue(Q);
         printf("%c", p->data);
