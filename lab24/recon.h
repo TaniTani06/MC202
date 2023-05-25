@@ -14,23 +14,14 @@ struct node{
 
 typedef struct node node;
 
-struct fila{
-    node* F[100];
-    int posi;
-    int posf;
-    int empty;
-};
+//typedef struct fila fila;
 
-typedef struct fila fila;
 
 node* cria(char raiz);
 void libera(node* arv);
 
 int adiciona(node* arv, char data, char* em);
-int pos(node* arv);
-int larg(node* arv);
-
-void enq(fila Q, node* arv);
-node* dequeue (fila Q);
+void pos(node* arv);
+void larg(node* arv);
 
 #endif

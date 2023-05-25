@@ -23,10 +23,8 @@ node* cria(char raiz){
 
 
 void libera(node* arv){
-    node* p = malloc(sizeof(node));
-    p = arv;
-
-    node* n = malloc(sizeof(node));
+    node* p = arv;
+    node* n;
 
     while (p != NULL){
         if (p->L != NULL){
@@ -47,7 +45,6 @@ void libera(node* arv){
         else{
             free(p);
             p = NULL;
-            n = NULL;
         }
     }
 
@@ -56,8 +53,12 @@ void libera(node* arv){
 
 
 int adiciona(node* arv, char data, char* em){
-    node* p = malloc(sizeof(node));
-    p = arv;
+    node* p = arv;
+    node* n = malloc(sizeof(node));
+
+    n->L = NULL;
+    n->R = NULL;
+    n->data = data;
 
     char* pos;
 
@@ -70,10 +71,7 @@ int adiciona(node* arv, char data, char* em){
     while (1){
         if (pos_data < pos_p){
             if (p->L == NULL){
-                p->L = malloc(sizeof(node));
-                p->L->data = data;
-                p->L->L = NULL;
-                p->L->R = NULL;
+                p->L = n;
                 return 0;
             }
             else{
@@ -85,10 +83,7 @@ int adiciona(node* arv, char data, char* em){
 
         if (pos_data > pos_p){
             if (p->R == NULL){
-                p->R = malloc(sizeof(node));
-                p->R->data = data;
-                p->R->L = NULL;
-                p->R->R = NULL;
+                p->R = n;
                 return 0;
             }
             else{
@@ -102,7 +97,7 @@ int adiciona(node* arv, char data, char* em){
 
 
 
-int pos(node* arv){
+void pos(node* arv){
     if (arv->L != NULL){
         pos(arv->L);
     }
@@ -115,48 +110,23 @@ int pos(node* arv){
 
 
 
-void enq(fila Q, node* arv){
-    Q.F[Q.posf] = arv;
-    Q.posf++;
-    Q.empty = 0;
-}
-
-
-
-node* dequeue(fila Q){
-    node* p = malloc(sizeof(node));
-
-    p = Q.F[Q.posi];
-    Q.F[Q.posi] = 0;
-    Q.posi++;
-    if (Q.posi == Q.posf){
-        Q.empty = 1;
-    }
-
-    return p;
-}
-
-
-
-int larg(node* arv){
-    fila Q;
-    Q.posi = 0;
-    Q.posf = 0;
-    Q.empty = 1;
-
-    node* p = malloc(sizeof(node));
-
-    enq(Q,arv);
-
-    while (Q.empty = 0){
-        p = dequeue(Q);
+void larg(node* arv){
+    
+    node* fila[100];
+    int frente = 0;
+    int tras = 0;
+    
+    
+    fila[tras++] = arv;
+    
+    while (frente < tras) {
+        node* p = fila[frente++];
         printf("%c", p->data);
-
-        if (p->L != NULL){
-            enq(Q,p->L);
-        }
-        if (p->L != NULL){
-            enq(Q,p->L);
-        }
+    
+        if (p->L != NULL)
+            fila[tras++] = p->L;
+    
+        if (p->R != NULL)
+            fila[tras++] = p->R;
     }
 }
