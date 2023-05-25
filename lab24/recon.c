@@ -26,22 +26,31 @@ void libera(node* arv){
     node* p = malloc(sizeof(node));
     p = arv;
 
+    node* n = malloc(sizeof(node));
+
     while (p != NULL){
         if (p->L != NULL){
+            n = p;
             p = p->L;
         }
         else if (p->R != NULL){
+            n = p;
             p = p->R;
         }
         else if (p != arv){
+            n->L = NULL;
+            n->R = NULL;
+
             free(p);
             p = arv;
         }
         else{
             free(p);
             p = NULL;
+            n = NULL;
         }
     }
+
 }
 
 
