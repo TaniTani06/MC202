@@ -43,6 +43,7 @@ void libera(abb* A){
             p = NULL;
         }
     }
+    free(A);
 }
 
 

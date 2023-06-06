@@ -8,7 +8,7 @@
 
 struct node{
     int key;
-    char* nome;
+    char nome[101];
     float pontos;
 
     struct node* pai;
