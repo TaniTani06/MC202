@@ -241,17 +241,29 @@ int remover(abb* A, int k){
 
 
 int intervalo(abb* A, int x, int y){ //não funciona se x e y nao estiverem na arvore
-    node* u = buscar(A->raiz, x);
-    node* v = buscar(A->raiz, y);
-
     printf("clientes no intervalo [%d,%d]: ", x, y);
+    
+    node* u = buscar(A->raiz, x);
+    while (u == NULL){
+        x++;
+        u = buscar(A->raiz, x);
+    }
+
+    node* v = buscar(A->raiz, y);
+    while (v == NULL){
+        y--;
+        v = buscar(A->raiz, y);
+    }
 
     if (u == v){
         printf("nenhum\n");
+        return 0;
     }
     while (u != v){
         printf("%d ", u->key);
         u = sucessor(A->raiz, u->key);
     }
-    printf("%d \n", y);
+    printf("%d \n", v->key);
+
+    return 0;
 }
