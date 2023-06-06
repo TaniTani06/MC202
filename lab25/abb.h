@@ -11,24 +11,33 @@ struct node{
     char* nome;
     float pontos;
 
+    struct node* pai;
     struct node* L;
     struct node* R;
 };
+
 typedef struct node node;
 
-node* cria();
-void libera(node* raiz);
+typedef struct{
+    node* raiz;
+}abb;
 
-int inserir(node* raiz, int k, char* nome, float pontos);
-int remover(node* raiz, int k);
-int buscar(node* raiz, int k);
 
-int max(node* arv);
-int min(node* arv);
 
-int sucessor(node* arv, int k);
-int predecessor(node* arv, int k);
+abb* cria();
+void libera(abb* A);
 
-int intervalo(node* arv, int x, int y);
+int inserir(abb* A, int k, char* nome, float pontos);
+int subs(abb* A, node* u, node* v);
+int remover(abb* A, int k);
+
+node* buscar(node* raiz, int k);
+node* max(node* raiz);
+node* min(node* raiz);
+
+node* sucessor(node* raiz, int k);
+node* predecessor(node* raiz, int k);
+
+int intervalo(abb* A, int x, int y);
 
 #endif

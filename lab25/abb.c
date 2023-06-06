@@ -5,25 +5,21 @@
 
 #include "abb.h"
 
-node* cria(){
-    node* arv = malloc(sizeof(node));
-    if (arv == NULL){
+abb* cria(){
+    abb* A = malloc(sizeof(abb));
+    if (A == NULL){
         return NULL;
     }
 
-    arv->key = 0;
-    arv->nome = malloc(101*sizeof(char));
-    arv->pontos = 0;
-    arv->L = NULL;
-    arv->R = NULL;
+    A->raiz = NULL;
 
-    return arv;
+    return A;
 }
 
 
 
-void libera(node* raiz){
-    node* p = raiz;
+void libera(abb* A){
+    node* p = A->raiz;
     node* n;
 
     while (p != NULL){
@@ -35,9 +31,9 @@ void libera(node* raiz){
             n = p;
             p = p->R;
         }
-        else if (p != raiz){
+        else if (p != A->raiz){
             free(p);
-            p = raiz;
+            p = A->raiz;
 
             n->L = NULL;
             n->R = NULL;
@@ -51,93 +47,211 @@ void libera(node* raiz){
 
 
 
-int inserir(node* raiz, int k, char* nome, float pontos){
-    if (raiz->key == 0){
-        raiz->key = k;
-        strcpy(raiz->nome, nome);
-        raiz->pontos = pontos;
+int inserir(abb* A, int k, char* nome, float pontos){
+    node* z = malloc(sizeof(node));
+    if (z == NULL){
+        printf("memoria insuficiente\n");
+        return 1;
+    }
+
+    z->key = k;
+    strcpy(z->nome, nome);
+    z->pontos = pontos;
+    z->L = NULL;
+    z->R = NULL;
+
+    node* n = A->raiz;
+    node* p = NULL;
+
+    while(n != NULL){
+        p = n;
+        if (z->key < n->key){
+            n = n->L;
+        }
+        else{
+            n = n->R;
+        }
+    }
+
+    if (p == NULL){
+        A->raiz = z;
+        z->pai = NULL;
+    }
+    else if (z->key < p->key){
+        p->L = z;
+        z->pai = p;
+    }
+    else if (z->key > p->key){
+        p->R = z;
+        z->pai = p;
+    }
+
+    return 0;
+}
+
+
+
+node* buscar(node* raiz, int k){
+    node* u = raiz;
+
+    while ((u != NULL) && (k != u->key)){
+        if (k < u->key){
+            u = u->L;
+        }
+        else{
+            u = u->R;
+        }
+    }
+    return u;
+}
+
+
+
+node* max(node* raiz){
+    node* u = raiz;
+
+    if (u == NULL){
+        return NULL;
+    }
+    while(u->R != NULL){
+        u = u->R;
+    }
+    return u;
+}
+
+
+
+node* min(node* raiz){
+    node* u = raiz;
+
+    if (u == NULL){
+        return NULL;
+    }
+    while(u->L != NULL){
+        u = u->L;
+    }
+    return u;
+}
+
+
+
+node* sucessor(node* raiz, int k){
+    node* u = buscar(raiz, k);
+
+    if (u->R != NULL){
+        return min(u->R);
+    }
+
+    node* p = u->pai;
+
+    while ((p != NULL) && (u == p->R)){
+        u = p;
+        p = p->pai;
+    }
+
+    return p;
+}
+
+
+
+node* predecessor(node* raiz, int k){
+    node* u = buscar(raiz, k);
+
+    if (u->L != NULL){
+        return max(u->L);
+    }
+
+    node* p = u->pai;
+
+    while ((p != NULL) && (u == p->L)){
+        u = p;
+        p = p->pai;
+    }
+
+    return p;
+}
+
+
+
+int subs(abb* A, node* u, node* v){
+    if (u->pai == NULL){
+        A->raiz = v;
+    }
+    else if (u == u->pai->L){
+        u->pai->L = v;
+    }
+    else{
+        u->pai->R = v;
+    }
+
+    if (v != NULL){
+        v->pai = u->pai;
+    }
+}
+
+
+
+int remover(abb* A, int k){
+    node* z = buscar(A->raiz, k);
+    if (z == NULL){
+        return 0;
+    }
+
+    if ((z->L == NULL) && (z->R == NULL)){
+        if (z->pai->L == z){
+            free(z);
+            z->pai->L = NULL;
+        }
+        else{
+            free(z);
+            z->pai->R = NULL;
+        }
+
+        return 0;
+    }
+
+
+    if (z->L == NULL){
+        subs(A, z, z->R);
+    }
+
+    else if (z->R == NULL){
+        subs(A, z, z->L);
     }
 
     else{
-        node* p = malloc(sizeof(node));
-        if (p == NULL){
-            printf("memoria insuficiente\n");
-            return 1;
+        node* u = min(z->R);
+
+        if (u->pai != z){
+            subs(A, u, u->R);
+            u->R = z->R;
+            u->R->pai = u;
         }
 
-        p->key = k;
-        strcpy(p->nome, nome);
-        p->pontos = pontos;
-        p->L = NULL;
-        p->R = NULL;
-
-        node* n = raiz;
-
-        while(1){
-            if (k < n->key){
-                if (n->L == NULL){
-                    n->L = p;
-                    return 0;
-                }
-                else{
-                    n = n->L;
-                }
-            }
-            else if(k > n->key){
-                if (n->R == NULL){
-                    n->R = p;
-                    return 0;
-                }
-                else{
-                    n = n->R;
-                }
-            }
-            else{
-                return 0;
-            }
-        }
+        subs(A, z, u);
+        u->L = z->L;
+        u->L->pai = u;
     }
 
+    free(z);
+
+    return 0;
 }
 
 
 
-int remover(node* raiz, int k){
+int intervalo(abb* A, int x, int y){ //não funciona se x e y nao estiverem na arvore
+    node* u = buscar(A->raiz, x);
+    node* v = buscar(A->raiz, y);
 
-}
+    printf("clientes no intervalo [%d,%d]: ", x, y);
 
-
-
-int buscar(node* raiz, int k){
-
-}
-
-
-
-int max(node* arv){
-
-}
-
-
-
-int min(node* arv){
-
-}
-
-
-
-int sucessor(node* arv, int k){
-
-}
-
-
-
-int predecessor(node* arv, int k){
-
-}
-
-
-
-int intervalo(node* arv, int x, int y){
-
+    if (u == v){
+        printf("nenhum\n");
+    }
+    while (u != v){
+        printf("%d ", u->key);
+        u = sucessor(A->raiz, u->key);
+    }
+    printf("%d \n", y);
 }
