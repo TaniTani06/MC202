@@ -32,6 +32,7 @@ int subs(abb* A, node* u, node* v);
 int remover(abb* A, int k);
 
 node* buscar(node* raiz, int k);
+
 node* max(node* raiz);
 node* min(node* raiz);
 
@@ -40,4 +41,5 @@ node* predecessor(node* raiz, int k);
 
 int intervalo(abb* A, int x, int y);
 
+int imprimir(node* A);
 #endif

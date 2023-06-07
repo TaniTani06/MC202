@@ -20,26 +20,31 @@ abb* cria(){
 
 void libera(abb* A){
     node* p = A->raiz;
-    node* n;
+    node* n = NULL;
 
     while (p != NULL){
         if (p->L != NULL){
-            n = p;
             p = p->L;
         }
         else if (p->R != NULL){
-            n = p;
             p = p->R;
         }
         else if (p != A->raiz){
-            free(p);
-            p = A->raiz;
+            n = p->pai;
 
-            n->L = NULL;
-            n->R = NULL;
+            if (n->L == p){
+                free(p);
+                n->L = NULL;
+            }
+            else{
+                free(p);
+                n->R = NULL;
+            }
+            p = A->raiz;
         }
         else{
             free(p);
+            A->raiz = NULL;
             p = NULL;
         }
     }
@@ -49,6 +54,10 @@ void libera(abb* A){
 
 
 int inserir(abb* A, int k, char* nome, float pontos){
+    if (buscar(A->raiz, k) != NULL){
+        return 0;
+    }
+
     node* z = malloc(sizeof(node));
     if (z == NULL){
         printf("memoria insuficiente\n");
@@ -188,24 +197,31 @@ int subs(abb* A, node* u, node* v){
     if (v != NULL){
         v->pai = u->pai;
     }
+    return 0;
 }
 
 
 
 int remover(abb* A, int k){
     node* z = buscar(A->raiz, k);
+    node* pai;
     if (z == NULL){
         return 0;
     }
+    pai = z->pai;
 
     if ((z->L == NULL) && (z->R == NULL)){
-        if (z->pai->L == z){
+        if (pai == NULL){
+        free(z);
+        A->raiz = NULL;
+        }
+        else if (pai->L == z){
             free(z);
-            z->pai->L = NULL;
+            pai->L = NULL;
         }
         else{
             free(z);
-            z->pai->R = NULL;
+            pai->R = NULL;
         }
 
         return 0;
@@ -241,30 +257,49 @@ int remover(abb* A, int k){
 
 
 
-int intervalo(abb* A, int x, int y){ //não funciona se x e y nao estiverem na arvore
+int intervalo(abb* A, int x, int y){
     printf("clientes no intervalo [%d,%d]: ", x, y);
     
     node* u = buscar(A->raiz, x);
-    while (u == NULL){
-        x++;
-        u = buscar(A->raiz, x);
+    if (u == NULL){
+        u = min(A->raiz);
+        while (u->key < x){
+            u = sucessor(A->raiz, u->key);
+        }
     }
 
     node* v = buscar(A->raiz, y);
-    while (v == NULL){
-        y--;
-        v = buscar(A->raiz, y);
+    if (v == NULL){
+        v = max(A->raiz);
+        while (v->key > y){
+            v = predecessor(A->raiz, v->key);
+        }
     }
 
-    if (u == v){
+    if (u->key > v->key){
         printf("nenhum\n");
         return 0;
     }
-    while (u != v){
+    while ((u != v) && (u != NULL)){
         printf("%d ", u->key);
         u = sucessor(A->raiz, u->key);
     }
     printf("%d \n", v->key);
 
+    return 0;
+}
+
+
+
+int imprimir(node* raiz){
+    if (raiz->L != NULL){
+        imprimir(raiz->L);
+    }
+
+    printf("%s (%d) ", raiz->nome, raiz->key);
+
+    if (raiz->R != NULL){
+        imprimir(raiz->R);
+    }
     return 0;
 }
