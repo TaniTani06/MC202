@@ -24,10 +24,10 @@ unsigned long djb2(unsigned char *str);
 int h1(unsigned long k, int m);
 int h2(unsigned long k, int tamanho);
 
-elem* busca(table T, char* str);
-elem* cria(int tamanho);
-void insert(table T, char* str, int ts);
-void remover(table T, char* str);
-void deleta(table T);
+elem* busca(table* T, char* str);
+table* cria(int tamanho);
+void insert(table* T, char* str, int ts);
+void remove(table* T, char* str);
+void delete(table* T);
 
 #endif
