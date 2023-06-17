@@ -28,7 +28,7 @@ int h2(unsigned long k, int m){
 
 //-------------funções da tabela------------//
 elem* busca(table* T, char* str){
-    int h = h1(djb2(str), T->size);
+    int h = h1(djb2((unsigned char*)str), T->size);
     int i = 1;
     elem* p = &T->data[h];
 
@@ -36,7 +36,7 @@ elem* busca(table* T, char* str){
         if(strcmp(T->data[h].str, str) == 0){
             return p;
         }
-        h = (h1(djb2(str), T->size) + i*h2(djb2(str), T->size))%T->size;
+        h = (h1(djb2((unsigned char*)str), T->size) + i*h2(djb2((unsigned char*)str), T->size))%T->size;
         i++;
         p = &T->data[h];
     }
@@ -65,12 +65,12 @@ int insert(table* T, char* str, int ts){
         return 1;
     }
     
-    int h = h1(djb2(str), T->size);
+    int h = h1(djb2((unsigned char*)str), T->size);
     int i = 1;
 
     //enquanto a posição estiver ocupada, atualiza h com o hashing duplo
     while(T->data[h].ts >= 0){
-        h = (h1(djb2(str), T->size) + i*h2(djb2(str), T->size))%T->size;
+        h = (h1(djb2((unsigned char*)str), T->size) + i*h2(djb2((unsigned char*)str), T->size))%T->size;
         i++;
         /*if(i == T->size){
             return;
