@@ -40,7 +40,7 @@ elem* busca(table* T, char* str){
         i++;
         p++;
     }
-    
+
     return NULL;
 }
 
@@ -60,9 +60,9 @@ table* cria(int tamanho){
 
 
 /*verifica se a cadeia está na tabela, se sim, não faz nada, se não adiciona*/
-void insert(table* T, char* str, int ts){
+int insert(table* T, char* str, int ts){
     if(busca(T, str)!=NULL){
-        return;
+        return 1;
     }
     
     int h = h1(djb2(str), T->size);
@@ -79,19 +79,21 @@ void insert(table* T, char* str, int ts){
 
     strcpy(T->data[h].str, str);
     T->data[h].ts = ts;
+    return 0;
 }
 
 
 /*busca e remove a cadeia, se houver*/
-void remove(table* T, char* str){
+int remove(table* T, char* str){
     elem* p = busca(T, str);
 
     if(p == NULL){
-        return;
+        return 1;
     }
 
     strcpy(p->str, "\0");
     p->ts = -6;
+    return 0;
 }
 
 
