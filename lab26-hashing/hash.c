@@ -30,7 +30,7 @@ int h2(unsigned long k, int m){
 elem* busca(table* T, char* str){
     int h = h1(djb2(str), T->size);
     int i = 1;
-    elem* p = T->data;
+    elem* p = &T->data[h];
 
     while(T->data[h].ts != -1){
         if(strcmp(T->data[h].str, str) == 0){
@@ -38,7 +38,7 @@ elem* busca(table* T, char* str){
         }
         h = (h1(djb2(str), T->size) + i*h2(djb2(str), T->size))%T->size;
         i++;
-        p++;
+        p = &T->data[h];
     }
 
     return NULL;
@@ -69,7 +69,7 @@ int insert(table* T, char* str, int ts){
     int i = 1;
 
     //enquanto a posição estiver ocupada, atualiza h com o hashing duplo
-    while(T->data[h].ts > 0){
+    while(T->data[h].ts >= 0){
         h = (h1(djb2(str), T->size) + i*h2(djb2(str), T->size))%T->size;
         i++;
         /*if(i == T->size){
@@ -84,16 +84,15 @@ int insert(table* T, char* str, int ts){
 
 
 /*busca e remove a cadeia, se houver*/
-int remove(table* T, char* str){
+void remover(table* T, char* str){
     elem* p = busca(T, str);
 
     if(p == NULL){
-        return 1;
+        return;
     }
 
     strcpy(p->str, "\0");
     p->ts = -6;
-    return 0;
 }
 
 

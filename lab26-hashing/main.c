@@ -6,13 +6,13 @@
 #include "hash.h"
 
 int main(void){
-    char str[251], func;
+    char str[251], func[1];
     int n, tamanho, timest;
     table* T = NULL;
     elem* p;
 
     while(1){
-        scanf("%c", &func);
+        scanf("%s", func);
 
         if(strcmp(func, "c")==0){
             scanf(" %d\n", &n);
@@ -39,7 +39,7 @@ int main(void){
 
         else if(strcmp(func, "r") == 0){
             scanf("%*c%[^\n] ", str);
-            remove(T, str);
+            remover(T, str);
         }
 
         else if(strcmp(func, "b") == 0){
@@ -50,21 +50,19 @@ int main(void){
                 printf("[%s] nao esta na tabela\n", str);
             }
             else{
-                printf("[%s] esta na tabela, timestamp %d\n", str, timest);
+                printf("[%s] esta na tabela, timestamp %d\n", str, p->ts);
             }
         }
 
         else if(strcmp(func, "f") == 0){
             delete(T);
+            return 0;
         }
 
         else{
-            printf("Função inválida!\n");
+            printf("Função inválida: %s\n", func);
+            delete(T);
+            return 1;
         }
     }
 }
-
-
-
-
-//x = ((n/0.7)+1);

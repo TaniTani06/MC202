@@ -27,7 +27,7 @@ int h2(unsigned long k, int tamanho);
 elem* busca(table* T, char* str);
 table* cria(int tamanho);
 int insert(table* T, char* str, int ts);
-int remove(table* T, char* str);
+void remover(table* T, char* str);
 void delete(table* T);
 
 #endif
