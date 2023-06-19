@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
 
 #ifndef HASH_H
 #define HASH_H
@@ -29,5 +30,7 @@ table* cria(int tamanho);
 int insert(table* T, char* str, int ts);
 void remover(table* T, char* str);
 void delete(table* T);
+
+unsigned first_prime(unsigned m);
 
 #endif

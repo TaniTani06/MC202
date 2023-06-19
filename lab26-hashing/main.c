@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
 
 #include "hash.h"
 
 int main(void){
-    char str[251], func[1];
-    int n, tamanho, timest;
+    char str[251], func[2];
+    int n, tamanho, timest = 0;
     table* T = NULL;
     elem* p;
 
@@ -17,9 +18,7 @@ int main(void){
         if(strcmp(func, "c")==0){
             scanf(" %d\n", &n);
             tamanho = ((n/0.7)+1);
-            if(tamanho%2 == 0){
-                tamanho++;
-            }
+            tamanho = (int)first_prime(tamanho);
             
             if(T!=NULL){
                 delete(T);

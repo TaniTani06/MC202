@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
 
 #include "hash.h"
 
@@ -99,4 +100,36 @@ void remover(table* T, char* str){
 void delete(table* T){
     free(T->data);
     free(T);
+}
+
+
+/*Verifica se o número inteiro x é primo*/
+unsigned first_prime(unsigned m) {
+    if (m == 0 || m == 1){
+        return 2;
+    }
+    if (m == 2 || m == 3){
+        return m;
+    }
+    if (m%2 == 0){
+        m += 1;
+    }
+
+    while (m) {
+        int i=0, lim = (int)sqrt(m);
+
+        if (m%3){
+            for (i=6; i<=lim; i+=6){
+                if(m%(i+1) == 0 || m%(i-1) == 0){
+                    break;
+                }
+            }
+        }
+
+        if(i>lim+1){
+            break;
+        }
+        m+=2;
+    }
+    return m;
 }
